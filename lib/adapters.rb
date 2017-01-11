@@ -74,6 +74,33 @@ module SelectorAdapter
 		end
 	end
 
+	# Unidades
+	module Unidade
+		def self.div_wrapper
+			'.subItens'
+		end
+
+		def self.sigla
+			'a/text()'
+		end
+
+		def self.nome
+			'.descricaoLink'
+		end
+
+		def self.apresentacao
+			'//*[@id="colDirCorpo"]/p'
+		end
+
+		def self.nome_diretor
+			'//*[@id="colDirCorpo"]/dl/dd[1]/a'
+		end
+
+		def self.url_sigaa
+			'a[@href]'
+		end
+	end
+
 end
 
 module LinkAdapter
@@ -99,6 +126,16 @@ module LinkAdapter
 
 		def self.producao_intelectual(siape)
 			"https://sigaa.ufma.br/sigaa/public/docente/producao.jsf?siape=#{siape}"
+		end
+	end
+
+	module Unidade
+		def self.portal
+			'https://sigaa.ufma.br/sigaa/public/centro/portal.jsf?id='
+		end
+
+		def self.lista
+			'http://portais.ufma.br/PortalUfma/paginas/sub_itens.jsf?id=926'
 		end
 	end
 end
