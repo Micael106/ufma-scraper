@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 require 'open-uri'
 
-@token = '27a714e1b5de5aae0320' # Token para autorizar a requição POST
+@token = # Token para autorizar a requição POST
 =begin
 @uri_cursos = URI('https://dados-abertos-ufma.herokuapp.com/api/v01/cursos')
 req = Net::HTTP::Post.new(@uri_cursos, 'Content-Type' => 'application/json')
