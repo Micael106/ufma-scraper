@@ -1,6 +1,8 @@
 class EstatisticasUFMA
+	require 'csv'
 	require 'json'
 	require 'open-uri'
+	require 'gchart'
 
 	def initialize
 		@url = 'https://dados-abertos-ufma.herokuapp.com/api/v01'
@@ -17,14 +19,35 @@ class EstatisticasUFMA
 		discentes_agrupados = JSON.parse File.read('discentes_por_curso.json')
 		discentes_agrupados.each do |curso_id, agrupamento|
 			estatisticas << [
-				dados_cursos.select{ |curso| curso["_id"] == curso_id }.first['nome'],
+				dados_cursos.select { |curso| curso["_id"] == curso_id }.first['nome'],
 				agrupamento.count ]
 		end
 		puts estatisticas
 		estatisticas.each do |curso|
 			File.open('est_discentes_por_curso.csv','a+'){ |f| f.puts(curso.join(',')) }
 		end
+		cursos = CSV.read('est_discentes_por_curso.csv').to_a
+		cursos.sort_by!{ |curso| curso.last.to_i }
+		CSV.open('top_10_cursos_mais_discentes.csv','w'){ |f| cursos.each { |curso| f << curso } }
+	end
+
+	def docentes_por_subunidade
+		dados_docentes = JSON.parse File.read(ENV['HOME'] + '/projects/ufma-scraper/docentes/docentes.json')
+		estatisticas = []
+		dados_docentes.group_by { |docente| docente['departamento'] }.each do |subunidade, docentes|
+			estatisticas << [
+				subunidade,
+				docentes.count
+			]
+		end
+		estatisticas.sort_by! { |estatistica| estatistica.last }.reverse!
+		File.open('top_10_subunidades_mais_docentes.csv', 'w') { |f| estatisticas.each { |est| f.puts est.to_csv } }
+		return estatisticas.first(10)
+	end
+
+	def professores_
+
 	end
 end
 
-EstatisticasUFMA.new.discentes_por_curso
+EstatisticasUFMA.new.docentes_por_subunidade

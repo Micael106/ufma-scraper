@@ -35,7 +35,7 @@ res = Net::HTTP.new(@uri_turmas.hostname, @uri_turmas.port)
 res.use_ssl = true
 res.request(req)
 puts res
-=end
+
 @uri_unidades = URI('https://dados-abertos-ufma.herokuapp.com/api/v01/unidades')
 req = Net::HTTP::Post.new(@uri_unidades, 'Content-Type': 'application/json')
 req.body = {unidades: File.read('unidades/unidades.json'), token: @token}.to_json
@@ -43,3 +43,18 @@ res = Net::HTTP.new(@uri_unidades.hostname, @uri_unidades.port)
 res.use_ssl = true
 res.request(req)
 puts res
+=end
+
+subunidades = open(URI 'https://script.google.com/macros/s/AKfycbw3tgQUxsncrmz2MQXGaDtxmg56OOwq41LIR1QalQ39pul4G0gF/exec').read
+@uri_subunidades = URI 'https://dados-abertos-ufma.herokuapp.com/api/v01/subunidades'
+req = Net::HTTP.Post.new(@uri_subunidades, 'Content-Type': 'application/json')
+req.body = { subunidades: subunidades, token: @token }.to_json
+res = Net::HTTP.new(@uri_subunidades.hostname, @uri_subunidades.port)
+res.use_ssl = true
+res.request(req)
+puts res
+
+
+
+
+
